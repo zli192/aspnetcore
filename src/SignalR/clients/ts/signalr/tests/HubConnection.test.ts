@@ -165,7 +165,6 @@ describe("HubConnection", () => {
                             "arg",
                             42,
                         ],
-                        streamIds: [],
                         target: "testMethod",
                         type: MessageType.Invocation,
                     });
@@ -194,7 +193,6 @@ describe("HubConnection", () => {
                             "arg",
                             null,
                         ],
-                        streamIds: [],
                         target: "testMethod",
                         type: MessageType.Invocation,
                     });
