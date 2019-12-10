@@ -228,9 +228,11 @@
     <MicrosoftWebAdministrationPackageVersion>11.1.0</MicrosoftWebAdministrationPackageVersion>
     <MicrosoftWebXdtPackageVersion>1.4.0</MicrosoftWebXdtPackageVersion>
     <SystemIdentityModelTokensJwtPackageVersion>5.5.0</SystemIdentityModelTokensJwtPackageVersion>
-    <!-- Packages from 2.1/2.2 branches used for site extension build -->
+    <!-- Packages from 2.1/2.2/3.0 branches used for site extension build -->
     <MicrosoftAspNetCoreAzureAppServicesSiteExtension21PackageVersion>2.1.1</MicrosoftAspNetCoreAzureAppServicesSiteExtension21PackageVersion>
     <MicrosoftAspNetCoreAzureAppServicesSiteExtension22PackageVersion>2.2.0</MicrosoftAspNetCoreAzureAppServicesSiteExtension22PackageVersion>
+    <MicrosoftAspNetCoreAzureAppServicesSiteExtension30x86PackageVersion>3.0.0-rc2-19475-14</MicrosoftAspNetCoreAzureAppServicesSiteExtension30x86PackageVersion>
+    <MicrosoftAspNetCoreAzureAppServicesSiteExtension30x64PackageVersion>3.0.0-rc2-19475-14</MicrosoftAspNetCoreAzureAppServicesSiteExtension30x64PackageVersion>
     <!-- 3rd party dependencies -->
     <AngleSharpPackageVersion>0.9.9</AngleSharpPackageVersion>
     <BenchmarkDotNetPackageVersion>0.10.13</BenchmarkDotNetPackageVersion>
