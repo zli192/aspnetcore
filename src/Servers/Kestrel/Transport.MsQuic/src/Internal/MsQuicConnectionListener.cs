@@ -18,7 +18,7 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Transport.MsQuic.Internal
     /// <summary>
     /// Listens for new Quic Connections.
     /// </summary>
-    internal class MsQuicConnectionListener : IConnectionListener, IAsyncDisposable, IDisposable
+    internal class MsQuicConnectionListener : IMultiplexedConnectionListener, IAsyncDisposable, IDisposable
     {
         private IMsQuicTrace _log;
         private MsQuicApi _api;
@@ -47,7 +47,7 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Transport.MsQuic.Internal
 
         public EndPoint EndPoint { get; set; }
 
-        public async ValueTask<ConnectionContext> AcceptAsync(CancellationToken cancellationToken = default)
+        public async ValueTask<MultiplexedConnectionContext> AcceptAsync(CancellationToken cancellationToken = default)
         {
             if (await _acceptConnectionQueue.Reader.WaitToReadAsync(cancellationToken))
             {

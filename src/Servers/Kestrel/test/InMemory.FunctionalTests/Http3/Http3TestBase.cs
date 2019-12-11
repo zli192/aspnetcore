@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Connections;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal;
+using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http3;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http3.QPack;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure;
@@ -96,7 +97,7 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Core.Tests
 
             var httpConnectionContext = new HttpConnectionContext
             {
-                ConnectionContext = _multiplexedContext,
+                MultiplexedConnectionContext = _multiplexedContext,
                 ConnectionFeatures = features,
                 ServiceContext = _serviceContext,
                 MemoryPool = _memoryPool,
