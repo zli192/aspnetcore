@@ -37,7 +37,7 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Core
         }
 
         // For testing
-        internal KestrelServer(IEnumerable<IConnectionListenerFactory> transportFactories, ServiceContext serviceContext)
+        internal KestrelServer(IEnumerable<IConnectionListenerFactory> transportFactories, IEnumerable<IMultiplexedConnectionListenerFactory> multiplexedFactories, ServiceContext serviceContext)
         {
             if (transportFactories == null)
             {
@@ -132,9 +132,27 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Core
                 async Task OnBind(ListenOptions options)
                 {
                     // Add the HTTP middleware as the terminal connection middleware
-                    options.UseHttpServer(ServiceContext, application, options.Protocols);
+                    if ((options.Protocols & HttpProtocols.Http1) == HttpProtocols.Http1)
+                    {
+                        options.UseHttp1Server(ServiceContext, application, options.Protocols);
+                        var connectionDelegate = options.Build();
+                    }
 
-                    var connectionDelegate = options.Build();
+                    if ((options.Protocols & HttpProtocols.Http2) == HttpProtocols.Http2)
+                    {
+                        options.UseHttp2Server(ServiceContext, application, options.Protocols);
+                        var connectionDelegate = options.Build();
+                    }
+
+                    if ((options.Protocols & HttpProtocols.Http3) == HttpProtocols.Http3)
+                    {
+                        options.UseHttp3Server(ServiceContext, application, options.Protocols);
+                        var connectionDelegate = options.Build();
+                    }
+
+                    // Add the HTTP middleware as the terminal connection middleware
+
+                    var multiplxedConnectionDelegate = options.BuildMultiplexed();
 
                     // Add the connection limit middleware
                     if (Options.Limits.MaxConcurrentConnections.HasValue)
@@ -144,31 +162,14 @@ namespace Microsoft.AspNetCore.Server.Kestrel.Core
 
                     var connectionDispatcher = new ConnectionDispatcher(ServiceContext, connectionDelegate);
 
-                    IConnectionListenerFactory factory = null;
-                    if (options.Protocols >= HttpProtocols.Http3)
-                    {
-                        foreach (var transportFactory in _transportFactories)
-                        {
-                            if (transportFactory is IMultiplexedConnectionListenerFactory)
-                            {
-                                // Don't break early. Always use the last registered factory.
-                                factory = transportFactory;
-                            }
-                        }
-
-                        if (factory == null)
-                        {
-                            throw new InvalidOperationException(CoreStrings.QuicTransportNotFound);
-                        }
-                    }
-                    else
-                    {
-                        factory = _transportFactories.Last();
-                    }
-
+                    var factory = _transportFactories.Last();
                     var transport = await factory.BindAsync(options.EndPoint).ConfigureAwait(false);
 
+                    var multiplexedFactory = _multiplexedTransportFactories.Last();
+                    var multiplexedTransport = await multiplexedFactory.BindAsync(options.EndPoint).ConfigureAwait(false);
+
                     // Update the endpoint
+                    // TODO I don't know if it makes sense to have two factories 
                     options.EndPoint = transport.EndPoint;
                     var acceptLoopTask = connectionDispatcher.StartAcceptingConnections(transport);
 
