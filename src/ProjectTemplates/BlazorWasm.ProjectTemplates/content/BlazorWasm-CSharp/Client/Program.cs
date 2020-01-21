@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Blazor.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 #if (!NoAuth)
 using Microsoft.AspNetCore.Components.Authorization;
 #endif
