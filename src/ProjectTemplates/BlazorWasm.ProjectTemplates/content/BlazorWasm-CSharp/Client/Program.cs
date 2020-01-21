@@ -20,6 +20,7 @@ namespace BlazorWasm_CSharp
 
             // use builder.Services to configure application services.
 #if (IndividualLocalAuth)
+            builder.Services.AddOptions();
             builder.Services.AddAuthorizationCore();
             builder.Services.AddSingleton<AuthenticationStateProvider, HostAuthenticationStateProvider>();
 #endif
